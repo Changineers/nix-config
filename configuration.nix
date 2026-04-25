@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, workmux, ... }:
 
 {
   boot.loader.grub.enable = true;
@@ -15,6 +15,8 @@
     claude-code
     git
     mise
+    tmux
+    workmux.packages.${pkgs.system}.default
   ];
 
   users.users.dev = {
