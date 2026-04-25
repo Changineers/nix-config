@@ -12,9 +12,7 @@
       specialArgs = { inherit workmux; };
       modules = [
         ./configuration.nix
-        # Read hardware config from a fixed path on the box at build time.
-        # --impure is required because we're reading outside the flake.
-        (import /etc/nixos/hardware-configuration.nix)
+        ./hardware-configuration.nix
       ];
     };
   };
