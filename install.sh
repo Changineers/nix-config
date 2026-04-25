@@ -22,24 +22,9 @@ if ! command -v nixos-rebuild &>/dev/null; then
   exit 0
 fi
 
-# Stage 2: clone config and apply
-echo "==> Cloning config to $CONFIG_DIR"
-if [[ ! -d "$CONFIG_DIR" ]]; then
-  nix-shell -p git --run "git clone '$REPO_URL' '$CONFIG_DIR'"
-else
-  nix-shell -p git --run "git -C '$CONFIG_DIR' pull --ff-only"
-fi
-
-HW_SRC="/etc/nixos/hardware-configuration.nix"
-HW_DST="$CONFIG_DIR/hardware-configuration.nix"
-if [[ -f "$HW_SRC" && ! -f "$HW_DST" ]]; then
-  cp "$HW_SRC" "$HW_DST"
-fi
-
-echo "==> Building and applying config"
-cd "$CONFIG_DIR"
-nix-shell -p git --run "git add -f hardware-configuration.nix"
-nix-shell -p git --run "nixos-rebuild switch --flake .#dev"
+nixos-rebuild switch \
+  --flake github:Changineers/nix-config#dev \
+  --impure
 
 cat <<'EOF'
 
