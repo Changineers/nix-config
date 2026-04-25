@@ -24,21 +24,26 @@ fi
 
 # Stage 2: clone config and apply
 echo "==> Cloning config to $CONFIG_DIR"
+
+# Trust the repo dir even if owned by another user (root after infect, dev now).
+git config --global --add safe.directory "$CONFIG_DIR" 2>/dev/null || \
+  nix-shell -p git --run "git config --global --add safe.directory '$CONFIG_DIR'"
+
 if [[ ! -d "$CONFIG_DIR" ]]; then
-  nix-shell -p git --run "git clone '$REPO_URL' '$CONFIG_DIR'"
+  sudo nix-shell -p git --run "git clone '$REPO_URL' '$CONFIG_DIR'"
 else
-  nix-shell -p git --run "git -C '$CONFIG_DIR' pull --ff-only"
+  sudo nix-shell -p git --run "git -C '$CONFIG_DIR' pull --ff-only"
 fi
 
 # Place hardware-configuration.nix from infect's output
 HW_SRC="/etc/nixos/hardware-configuration.nix"
 HW_DST="$CONFIG_DIR/hardware-configuration.nix"
 if [[ -f "$HW_SRC" && ! -f "$HW_DST" ]]; then
-  cp "$HW_SRC" "$HW_DST"
+  sudo cp "$HW_SRC" "$HW_DST"
 fi
 
 # Stage it locally so the flake can see it (it's gitignored)
-nix-shell -p git --run "git -C '$CONFIG_DIR' add -f hardware-configuration.nix"
+sudo nix-shell -p git --run "git -C '$CONFIG_DIR' add -f hardware-configuration.nix"
 
 cat <<'EOF'
 
