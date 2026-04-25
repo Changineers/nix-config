@@ -14,7 +14,7 @@
         ./configuration.nix
         # Read hardware config from a fixed path on the box at build time.
         # --impure is required because we're reading outside the flake.
-        /etc/nixos/hardware-configuration.nix
+        (import /etc/nixos/hardware-configuration.nix)
       ];
     };
   };
