@@ -9,7 +9,10 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nixpkgs.config.allowUnfree = true;  # Claude Code has an unfree license
+
   environment.systemPackages = with pkgs; [
+    claude-code
     git
     mise
   ];
