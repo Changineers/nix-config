@@ -38,7 +38,8 @@ fi
 
 echo "==> Building and applying config"
 cd "$CONFIG_DIR"
-nix-shell -p git --run "nixos-rebuild switch --flake .#dev --impure" # impure is needed for the hardware-configuration file
+nix-shell -p git --run "git add -f hardware-configuration.nix"
+nix-shell -p git --run "nixos-rebuild switch --flake .#dev"
 
 cat <<'EOF'
 
