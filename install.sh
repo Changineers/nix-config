@@ -70,7 +70,7 @@ fi
 # Optional personal home-manager layer.
 if [[ -n "$HM_FLAKE" ]]; then
   echo "==> Activating home-manager flake: $HM_FLAKE"
-  sudo -u dev nix run home-manager/release-25.11 -- switch --flake "$HM_FLAKE"
+  sudo -u dev nix run home-manager/release-25.11 -- switch --refresh --flake "$HM_FLAKE"
 fi
 
 cat <<EOF
