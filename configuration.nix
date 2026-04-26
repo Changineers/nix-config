@@ -64,6 +64,9 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
 
+  # Lets non-Nix dynamic binaries (e.g. mise-managed node) find /lib64/ld-linux-*.
+  programs.nix-ld.enable = true;
+
   # SSH access is via Tailscale only — no static authorized keys.
   users.users.dev = {
     isNormalUser = true;
