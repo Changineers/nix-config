@@ -45,6 +45,9 @@ fi
 # Stage it locally so the flake can see it (it's gitignored)
 sudo nix-shell -p git --run "git -C '$CONFIG_DIR' add -f hardware-configuration.nix"
 
+echo "==> Applying configuration"
+sudo nixos-rebuild switch --flake "$CONFIG_DIR#dev"
+
 cat <<'EOF'
 
 ==> Done. Next:
