@@ -20,6 +20,7 @@
     home-manager
     mise
     mosh
+    python3
     tmux
 
     (writeShellScriptBin "setup-github-ssh" ''
