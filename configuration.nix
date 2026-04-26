@@ -19,6 +19,7 @@
     gnumake
     home-manager
     mise
+    mosh
     tmux
 
     (writeShellScriptBin "setup-github-ssh" ''
