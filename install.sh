@@ -4,11 +4,23 @@
 #
 # Usage (SSH'd in as root):
 #   curl -fsSL https://raw.githubusercontent.com/Changineers/nix-config/main/install.sh | bash
+#
+# Optional: layer a home-manager flake on top after the system rebuild:
+#   curl -fsSL ... | bash -s -- --home-manager github:<you>/dotfiles#dev
 
 set -euo pipefail
 
 REPO_URL="https://github.com/Changineers/nix-config.git"
 CONFIG_DIR="/etc/nixos-config"
+HM_FLAKE=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --home-manager=*) HM_FLAKE="${1#*=}"; shift ;;
+    --home-manager)   HM_FLAKE="$2"; shift 2 ;;
+    *) echo "Unknown arg: $1" >&2; exit 1 ;;
+  esac
+done
 
 # Stage 1: nixos-infect (skipped if already on NixOS)
 if ! command -v nixos-rebuild &>/dev/null; then
@@ -53,6 +65,12 @@ sudo nixos-rebuild switch --flake "$CONFIG_DIR#dev"
 if ! sudo tailscale status &>/dev/null; then
   echo "==> Bringing up Tailscale (visit the URL it prints to authenticate)"
   sudo tailscale up --ssh
+fi
+
+# Optional personal home-manager layer.
+if [[ -n "$HM_FLAKE" ]]; then
+  echo "==> Activating home-manager flake: $HM_FLAKE"
+  sudo -u dev nix run home-manager/release-25.11 -- switch --flake "$HM_FLAKE"
 fi
 
 cat <<EOF
