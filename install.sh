@@ -48,10 +48,16 @@ sudo nix-shell -p git --run "git -C '$CONFIG_DIR' add -f hardware-configuration.
 echo "==> Applying configuration"
 sudo nixos-rebuild switch --flake "$CONFIG_DIR#dev"
 
-cat <<'EOF'
-
-==> Done. Next:
+# Tailscale is the only path in once the firewall closes port 22.
+# Skip if already up (re-runs of install.sh shouldn't re-auth).
+if ! sudo tailscale status &>/dev/null; then
+  echo "==> Bringing up Tailscale (visit the URL it prints to authenticate)"
   sudo tailscale up --ssh
-  ssh dev@<ip>
+fi
+
+cat <<EOF
+
+==> Done. From your tailnet:
+  ssh dev@$(hostname)
 
 EOF

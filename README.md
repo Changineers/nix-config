@@ -20,13 +20,10 @@ On a fresh Ubuntu box, SSH in and run:
 curl -fsSL https://raw.githubusercontent.com/Changineers/nix-config/main/install.sh | bash
 ```
 
-Reboots into NixOS. SSH back in, re-run the same command to finish the installation.
+Reboots into NixOS. SSH back in, re-run the same command — it finishes the install and brings up Tailscale (you'll click the auth URL it prints).
 
-After:
+After that, the box is reachable from your tailnet only — public port 22 is closed.
+
 ```bash
-sudo tailscale up --ssh
+ssh dev@<hostname>
 ```
-
-## TODO before first apply
-
-- Replace SSH key in `configuration.nix`
