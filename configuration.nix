@@ -13,8 +13,10 @@
 
   environment.systemPackages = with pkgs; [
     claude-code
+    gcc
     gh
     git
+    gnumake
     home-manager
     mise
     tmux
