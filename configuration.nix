@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   boot.loader.grub.enable = true;
@@ -18,7 +18,7 @@
     git
     gnumake
     home-manager
-    mise
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.mise
     mosh
     python3
     tmux
